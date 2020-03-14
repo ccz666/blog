@@ -4,13 +4,20 @@
 <script>
 document.cookie="h=r; a=b";
 //获取cookie
-function getCookie(){
-oc=document.cookie;
-ock=oc.split(";");
-vx=ock[0];
+function getCookie(name){
+//oc=document.cookie;
+ock=document.cookie.split(";");
+for (m=0;m<ock.length;m++){
+ockk=ock[m].trim().split("=");
+if (ockk[0]==name){
+alert(ockk[1]);
+return;
+}
+
+}
 alert(vx);
 }
-getCookie();
+getCookie("h");
 //关窗
 function closeW(id){
 G(id).style.display="none";
