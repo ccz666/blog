@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script>
+document.cookie="h=r; a=b";
+//获取cookie
+function getCookie(){
+oc=document.cookie;
+ock=oc.split(";");
+vx=ock[0];
+alert(vx);
+}
+getCookie();
+//关窗
+function closeW(id){
+G(id).style.display="none";
+}
+//历史
+/*function sethis(){
+
+function BC(num){
+return ghctd[num].style.backgroundColor;
+}
+
+//var hisArr=[];
+ghctd=ghC.getElementsByTagName("td");
+
+if (rgb2hex(BC(0))==color.value){
+ghctd=null;
+return;
+}
+for (l=0;l<5;l++){
+if (color.value==rgb2hex(BC(l))){
+var ooc=BC(l);
+BC(l)="white";
+BC(4)=BC(3);
+BC(3)=BC(2);
+BC(2)=BC(1);
+BC(0)=ooc;
+alert(BC(0));
+return;
+}
+
+}
+for (k=4;k>0;k--){
+
+ghctd[k].style.backgroundColor=ghctd[k-1].style.backgroundColor;
+}
+ghctd[0].style.backgroundColor=color.value;
+ghctd=null;
+}*/
+//载入颜色
+function loadColor(){
+for (h=0;h<256;h++){
+tdNum[h]=rgb2hex(tds[h].style.backgroundColor);
+
+}
+//G("tes").innerText=tdNum;
+}
+//$
+function G(id){
+return document.getElementById(id);
+}
+//rgb颜色=>十六进制
+function rgb2hex(rgb){
+rArr=rgb.substring(4,rgb.length-1).split(",");
+if (rArr.length<3){
+rArr=null;
+return rgb;
+
+}
+for (n=0;n<3;n++){
+rArr[n]=Number(rArr[n]).toString(16);
+
+if (rArr[n].length==1){
+rArr[n]="0"+rArr[n];
+}
+}
+return "#"+rArr.join("");
+}
+</script>
+<meta name="viewport" content="user-scalable=no"/>
+<meta charset="UTF-8"/>
+<style>
+/*
+我不知道以下的一坨是我怎么写出来的
+有没有大佬告诉我css怎么写[喷水]
+还有别问我我什么不用let
+不适配=^=
+*/
+#back {position:absolute}
+#pencil {width:400px;height:200px;position:absolute}
+#hisColor {border-spacing:10px;position:absolute}
+#hisColor td {width:75px;height:75px;background-color:white}
+#close {position:relative;left:450px}
+#pencil {position:absolute;top:850px;text-align:left}
+body {background-image:linear-gradient(to left,#5500ff,#ff0073)}
+#color {width:80px;height:80px;}
+#radius {border-radius:25px;width:800px;height:800px;background-color:#33d7f8;position:absolute;}
+#head td {width:40px;height:40px}
+#head {position:absolute;left:63px;top:20px;border-collapse:collapse;background-color:white}
+#pencils {width:220px;height:80px;position:absolute}
+textarea {width:500px;height:200px;font-size:30px}
+#inputArr {display:block;border-radius:40px;width:500px;height:700px;position:absolute;background-color:red}
+.ta {text-align:center;font-size:50px}
+button {opacity:0.7;width:160px;height:80px;background-image:linear-gradient(#ff8000,#fff700);position:absolute;}
+#yArr {left:170px}
+</style>
+</head>
+<body>
+<div id="radius">
+<table id="head"></table>
+<button id="back" class="ta">撤销</button>
+<table id="hisColor">
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table>
+</div>
+<div id="pencil">
+<input id="color" type="color" onclick=""/>
+<select id="pencils" class="ta">
+<option>画笔</option>
+<option>横向画刷</option>
+<option>竖向画刷</option>
+<option>取色器</option>
+</select>
+
+</div>
+<div id="inputArr">
+<span id="close" class="ta">X</span>
+<p class="ta">插入保存的数组：</p>
+<textarea id="txtArr">
+</textarea>
+<button class="ta" id="yArr">确定</button>
+</div>
+<div id="tes" style="position:absolute;bottom:200px"></div>
+<script>
+//alert(G("hisColor").offsetWidth);
+
+var ghC=G("hisColor");
+var back=G("back");
+var table=G("head");
+var cv=G("color");
+var gps=G("pencils");
+var tdNum=[];
+var tds=table.getElementsByTagName("td");
+var trs=table.getElementsByTagName("tr");
+//输入布局
+//G("hisColor").cellSpacing="20px";
+//生成画布
+//G("radius").offsetleft
+for (c=0;c<16;c++){
+tr=document.createElement("tr");
+for (b=0;b<16;b++){
+td=document.createElement("td");
+td.num=b+c*16;
+td.style.backgroundColor="#ffffff";
+tr.appendChild(td);
+tdNum.push(td.style.backgroundColor);
+}
+table.appendChild(tr);
+}
+//alert(table.offsetWidth)
+
+//处理事件
+G("close").ontouchstart=function (){
+closeW("inputArr");
+};
+G("yArr").ontouchstart=function (){
+
+tarr=G("txtArr").value.split(",");
+
+if (tarr.length!=256){
+alert("数组格式不正确！");
+}else{
+for (t=0;t<256;t++){
+tds[t].style.backgroundColor=tarr[t];
+closeW("inputArr");
+}
+}
+};
+gps.onchange=function (){
+
+table.ontouchstart=null;
+switch (gps.selectedIndex){
+
+case 0:
+//画刷
+ghC.getElementsByTagName("td")[0].style.backgroundColor=color.value;
+table.ontouchstart=function (event){
+evt0=event.touches[0].target;
+
+evt0.style.backgroundColor=color.value;
+tdNum[evt0.num]=evt0.style.backgroundColor;
+//G("tes").innerText=tdNum;
+evt0=null;
+//sethis();
+}
+break;
+case 1:
+//横向画刷
+//填充行内td
+table.ontouchstart=function (event){
+v=event.touches[0].target.num;
+lsc=trs[(v-v%16)/16].getElementsByTagName("td");
+for (f=0;f<16;f++){
+lsc[f].style.backgroundColor=color.value;
+v=null;
+}
+lsc=null;
+
+};
+break;
+case 2:
+//竖向画刷
+table.ontouchstart=function (event){
+u=event.touches[0].target.num%16;
+for (g=0;g<16;g++){
+tds[u+g*16].style.backgroundColor=color.value;
+}
+u=null;
+};
+//待添加
+break;
+case 3:
+//取色器
+table.ontouchstart=function (event){
+evt0=event.touches[0].target;
+color.value=rgb2hex(evt0.style.backgroundColor);
+evt0=null;
+};
+break;
+}
+};
+//动态定位
+gps.style.top=color.offsetTop+"px";
+gps.style.left=color.offsetLeft+90+"px";
+back.style.left=table.offsetLeft+"px";
+back.style.top=table.offsetTop+table.offsetHeight+10+"px";
+ghC.style.right=table.offsetLeft+"px";//神奇的代码[吐血]
+ghC.style.top=back.style.top;
+G("inputArr").style.left=(window.innerWidth-500)/2+"px";
+G("radius").style.left=(window.innerWidth-800)/2+"px";
+G("pencil").style.left=G("radius").offsetLeft+"px";
+//有没有大佬有更好的解决方式
+</script>
+</body>
+</html>
